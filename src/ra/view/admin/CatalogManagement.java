@@ -4,6 +4,7 @@ import ra.config.Config;
 import ra.config.Validate;
 import ra.model.Catalogs;
 import ra.model.Products;
+import ra.model.account.Users;
 import ra.reponsitory.CatalogsReponsitory;
 import ra.reponsitory.ProductReponsitory;
 import ra.service.CatalogsService;
@@ -23,9 +24,11 @@ public class CatalogManagement {
         String resetColor = "\u001B[0m"; // Đặt màu về màu mặc định
 
         System.out.println("\u001B[33m"); // Màu vàng
+        Config<Users> config = new Config<>();
+        Users users = config.readFile(Config.URL_USERS_LOGIN);
 
         do {
-            System.out.println("Xin Chào " + Home.usersLogin.getFullName());
+            System.out.println("Xin Chào " + users.getFullName());
             System.out.println("\u001B[35m╔═══════════════════════════ CATALOGS MANAGEMENT ════════════════════════════╗");
             System.out.println("\u001B[36m║                   1. Hiển thị tất cả danh mục sản phẩm                     ║");
             System.out.println("\u001B[36m║                   2. Thêm danh mục sản phẩm                                ║");
@@ -59,6 +62,8 @@ public class CatalogManagement {
                 case 6:
                     seachCatalog();
                     break;
+//                case 7:
+//                    statusCatalog();
                 case 0:
                     return;
                 default:
@@ -67,6 +72,19 @@ public class CatalogManagement {
             }
         } while (true);
     }
+
+//    private void statusCatalog() {
+//        System.out.println("Mời nhập ID danh mục cần sửa trang thai :");
+//        int idStatus = Validate.validateInt();
+//        Catalogs catalogsEdit = catalogsReponsitory.findById(idStatus);
+//        if (catalogsEdit == null) {
+//            System.out.println("Danh mục cần sửa theo mã ID vừa nhập không tồn tại");
+//        } else {
+//            catalogsEdit.setStatus(!catalogsEdit.isStatus());
+//            catalogsReponsitory.save(catalogsEdit);
+//            System.out.println("Sửa trạng thái danh mục sản phẩm thành công");
+//        }
+//    }
 
     private void seachCatalog() {
         System.out.println("Nhập tên danh mục bạn cần tìm kiếm :");
@@ -122,7 +140,21 @@ public class CatalogManagement {
         Catalogs catalogsEdit = catalogsReponsitory.findById(idEdit);
         if (catalogsEdit == null) {
             System.out.println("Danh mục cần sửa theo mã ID vừa nhập không tồn tại");
-        } else {
+            return;
+        }
+        List<Products> productsList = productReponsitory.findAll();
+
+        boolean checkProduct = false;
+        for (Products product : productsList) {
+            if (product.getCategoryId().getId() == idEdit) {
+                checkProduct = true;
+                break;
+            }
+        }
+
+        if (checkProduct) {
+            System.out.println("Danh mục đã tồn tại sản phẩm. Không thể sửa.");
+        }else {
             System.out.println(catalogsEdit);
             System.out.println("1.Sửa tên danh mục");
             System.out.println("2.Sửa mô tả danh mục");
@@ -175,7 +207,7 @@ public class CatalogManagement {
         System.out.println("Thêm mới thành công");
     }
 
-    private void showCatalogs(int currentPage, int pageSize) {
+        private void showCatalogs(int currentPage, int pageSize) {
         List<Catalogs> allCatalogs = catalogsReponsitory.findAll();
         int totalCatalogs = allCatalogs.size();
 

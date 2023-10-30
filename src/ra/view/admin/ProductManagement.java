@@ -4,6 +4,7 @@ import ra.config.Config;
 import ra.config.Validate;
 import ra.model.Catalogs;
 import ra.model.Products;
+import ra.model.account.Users;
 import ra.reponsitory.CatalogsReponsitory;
 import ra.reponsitory.ProductReponsitory;
 import ra.service.CatalogsService;
@@ -21,12 +22,13 @@ public class ProductManagement {
     private int currentPage = 1;
     String resetColor = "\u001B[0m"; // Đặt màu về màu mặc định
 
-
+    Config<Users>config=new Config<>();
+    Users users=config.readFile(Config.URL_USERS_LOGIN);
 
     public void menuProductManagement() {
         do {
             System.out.println("\u001B[33m"); // Màu vàng
-            System.out.println("Xin Chào " + Home.usersLogin.getFullName());
+            System.out.println("Xin Chào " + users.getFullName());
             System.out.println("\u001B[35m╔════════════════════════════ PRODUCT MANAGEMENT ════════════════════════════╗");
             System.out.println("\u001B[36m║                        1. Hiển thị tất cả sản phẩm                         ║");
             System.out.println("\u001B[36m║                        2. Thêm sản phẩm                                    ║");
@@ -128,7 +130,7 @@ public class ProductManagement {
                     List<Catalogs> activeCatalogs = new ArrayList<>();
                     List<Catalogs> allCatalogs = catalogsReponsitory.findAll();
                     for (int j = 0; j < allCatalogs.size(); j++) {
-                        if (allCatalogs.get(j).isStatus()) { // Check if the catalog is active
+                        if (allCatalogs.get(j).isStatus()) {
                             activeCatalogs.add(allCatalogs.get(j));
                             System.out.println((activeCatalogs.size()) + "." + activeCatalogs.get(activeCatalogs.size() - 1).getCatalogName());
                         }
@@ -259,6 +261,11 @@ public class ProductManagement {
             System.out.println("Page " + currentPage + " of " + totalPages);
             for (int i = startIndex; i < endIndex; i++) {
                 System.out.println(allProducts.get(i));
+//                Products product = allProducts.get(i);
+//                Catalogs catalog = product.getCategoryId();
+//                if (catalog != null && !catalog.isStatus()) {
+//                    System.out.println(product);
+//                }
             }
 
             System.out.print("9. Trang trước | 0. Trang kế | Q. Thoát");
@@ -286,4 +293,7 @@ public class ProductManagement {
             }
         }
     }
+
+
+
 }

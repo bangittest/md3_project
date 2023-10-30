@@ -14,8 +14,10 @@ public class Config<T> {
 
     //config ghi đọc file
     public static final String URL_USERS = "src/ra/data/user.txt";
+    public static final String URL_USERS_LOGIN = "src/ra/data/userLogin.txt";
     public static final String URL_CATALOGS = "src/ra/data/catalog.txt";
     public static final String URL_PRODUCTS = "src/ra/data/product.txt";
+
 
     public void writeFile(String PATH_FILE, T t) {
         File file = new File(PATH_FILE);

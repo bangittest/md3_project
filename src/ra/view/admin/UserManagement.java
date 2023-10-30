@@ -1,21 +1,23 @@
 package ra.view.admin;
 
+import ra.config.Config;
 import ra.config.Validate;
 import ra.model.account.RoleName;
 import ra.model.account.Users;
 import ra.reponsitory.UserReponsitory;
 import ra.service.UserService;
-import ra.view.home.Home;
 
 import java.util.List;
 
 public class UserManagement {
     UserReponsitory userReponsitory = new UserService();
 
+    Config<Users>config=new Config<>();
+    Users users=config.readFile(Config.URL_USERS_LOGIN);
     public void menuUserManagement() {
 
         do {
-            System.out.println("Xin Chào " + Home.usersLogin.getFullName());
+            System.out.println("Xin Chào " + users.getFullName());
             System.out.println("╔══════════════════════════════════════════╗");
             System.out.println("║              USER MANAGEMENT             ║");
             System.out.println("╠══════════════════════════════════════════╣");
@@ -142,6 +144,10 @@ public class UserManagement {
         Users users = userReponsitory.findById(idBlock);
         if (users == null) {
             System.out.println("Tài khoản cần sửa theo mã ID vừa nhập không tồn tại");
+            return;
+        }
+        if (users.getRoles()==RoleName.ADMIN){
+            System.out.println("Tài khoản có quyền ADMIN. Không thể Block");
         } else {
             System.out.println(users);
             users.setStatus(!users.isStatus());

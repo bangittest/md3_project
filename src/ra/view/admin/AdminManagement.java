@@ -1,6 +1,8 @@
 package ra.view.admin;
 
+import ra.config.Config;
 import ra.config.Validate;
+import ra.model.account.Users;
 import ra.view.home.Home;
 
 import java.time.LocalDateTime;
@@ -13,12 +15,14 @@ public class AdminManagement {
     String yellow = "\u001B[33m";
     String purple = "\u001B[35m";
     String resetColor = "\u001B[0m";
+    Config<Users> config=new Config<>();
+    Users users=config.readFile(Config.URL_USERS_LOGIN);
     public void menuAdmin() {
                 do {
                     System.out.println("+-----------------------------------------------------------------------+");
                     System.out.println("|                         \uD83D\uDCBB   ADMIN HOME   \uD83D\uDCBB                          |");
                     System.out.println("|-----------------------------------------------------------------------|");
-                    System.out.println("|                        \uD83D\uDC4B Xin chào, " + Home.usersLogin.getFullName() + "!                            |");
+                    System.out.println("|                        \uD83D\uDC4B Xin chào, " + users.getFullName() + "!                            |");
                     System.out.println("|                    Thời gian: \uD83D\uDD70 " + getCurrentTime() + "                   |");
                     System.out.println("|-----------------------------------------------------------------------|");
                     System.out.println("|                      1. \uD83D\uDCD7   Quản lý danh mục                         |");
@@ -44,7 +48,7 @@ public class AdminManagement {
 
                             break;
                         case 0:
-                          Home.usersLogin=null;
+                            new Config<Users>().writeFile(Config.URL_USERS_LOGIN,null);
                           new Home().menuHome();
                         default:
                             System.out.println("Lựa chọn không hợp lệ. Vui lòng chọn lại.");
