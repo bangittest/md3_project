@@ -1,9 +1,12 @@
 package ra.model.account;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Set;
 
 public class Users implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int id;
     private String username;
     private String email;
@@ -92,28 +95,10 @@ public class Users implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-
     @Override
     public String toString() {
-        String border = "===========================================================";
-        String line = "-----------------------------------------------------------";
-        String statusText = status ? "Đang hoạt động" : "Bị khóa";
-
-        String result = String.format(
-                "\n%s\n" +
-                        "| %-10s: %d\n" +
-                        "| %-10s: %s\n" +
-                        "| %-10s: %s\n" +
-                        "| %-10s: %s\n" +
-                        "| %-10s: %s\n" +
-                        "| %-10s: %s\n" +
-                        "| %-10s: %s\n" +
-                        "| %-10s: %s\n" +
-                        "%s",
-                border, "ID", id, "Username", username, "Email", email, "Full Name", fullName,
-                "Password", password, "Status", statusText, "Roles", roles, "Phone Number", phoneNumber, border
-        );
-
-        return result;
+        String format = "%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n";
+        System.out.println();
+        return String.format(format, id, username, email, fullName, status, roles, phoneNumber);
     }
 }

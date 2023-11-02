@@ -1,10 +1,10 @@
-package ra.view.login;
+package ra.view.account;
 
 import ra.config.Validate;
 import ra.model.account.RoleName;
 import ra.model.account.Users;
 import ra.reponsitory.UserReponsitory;
-import ra.service.UserService;
+import ra.service.UserService;;
 
 public class Singnup {
     UserReponsitory userReponsitory=new UserService();
@@ -17,16 +17,31 @@ public class Singnup {
         System.out.println("Nhập tài khoản:");
         while (true) {
             String username = (Validate.validateString());
-            if (userReponsitory.existsUsername(username)) {
-                System.out.println("Tên đăng nhập đã tồn tại vui lòng nhập lại:");
-            } else {
-                users.setUsername(username);
-                break;
-            }
+           if (username.trim().length()>6){
+               if (userReponsitory.existsUsername(username)) {
+                   System.out.println("Tên đăng nhập đã tồn tại vui lòng nhập lại:");
+               } else {
+                   users.setUsername(username);
+                   break;
+               }
+           }else {
+               System.out.println("Tên tài khoản cần ít nhất 6 kí tự");
+           }
 
         }
-        System.out.println("Nhập mật khẩu :");
-        users.setPassword(Validate.validateString());
+//        System.out.println("Nhập mật khẩu :");
+//        users.setPassword(Validate.validateString());
+        while (true) {
+            System.out.print("Nhập mật khẩu: ");
+            String password = Validate.validateString();
+
+            if (password.length() >= 6) {
+                users.setPassword(password);
+                break;
+            } else {
+                System.out.println("Mật khẩu cần ít nhất 6 kí tự");
+            }
+        }
         System.out.println("Xác nhận lại mật khẩu :");
         while (true){
             String confirmPassword = Validate.validateString();
@@ -67,6 +82,7 @@ public class Singnup {
                             userReponsitory.save(users);
                             System.out.println("Phân quyền ADMIN tài khoản thành công");
                             isAdminConfirmed = true;
+                            shouldContinue = false;
                         } else if (adminPassword.equals("0")) {
                             // Nếu người dùng nhập '0', thoát khỏi vòng lặp và quay lại chọn vai trò
                             shouldContinue = false;

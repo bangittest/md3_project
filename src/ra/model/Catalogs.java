@@ -1,12 +1,15 @@
 package ra.model;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class Catalogs implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int id;
     private String catalogName;
     private String description;
-    private boolean status;
+    private boolean status=true;
 
     public Catalogs(int id, String catalogName, String description, boolean status) {
         this.id = id;
@@ -50,19 +53,12 @@ public class Catalogs implements Serializable {
         this.status = status;
     }
 
+
     @Override
     public String toString() {
-        String statusText = status ? "Đang hoạt động" : "Không hoạt động";
-
-        StringBuilder builder = new StringBuilder();
-        builder.append("================================ Catalog ================================\n");
-        builder.append(String.format("| %-15s: %d\n", "Catalog ID", id));
-        builder.append(String.format("| %-15s: %s\n", "Tên danh mục", catalogName));
-        builder.append(String.format("| %-15s: %s\n", "Mô tả", description));
-        builder.append(String.format("| %-15s: %s\n", "Trạng thái", statusText));
-        builder.append("===========================================================================");
-
-        return builder.toString();
+        String format = "%-10s %-20s %-20s %-20s%n";
+        System.out.println();
+        return String.format(format, id, catalogName, description, (status ? "Đang hoạt động" : "Không hoạt động"));
     }
 
 }

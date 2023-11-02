@@ -2,11 +2,13 @@ package ra.config;
 
 import java.text.DecimalFormat;
 
+import static ra.config.Color.RESET;
+
 public class Validate {
     //validate nhập số
     public static int validateInt(){
         int n ;
-        System.out.println("Mời nhập: ");
+//        System.out.println("Mời nhập: ");
         while (true){
             try {
                 n = Integer.parseInt(Config.scanner().nextLine());
@@ -58,7 +60,7 @@ public class Validate {
         String s;
         while (true){
             s=Config.scanner().nextLine();
-            if (s.isEmpty()){
+            if (s.trim().isEmpty()){
                 System.out.println("Không được để trống mời nhập lại");
             }else {
                 break;
@@ -66,4 +68,9 @@ public class Validate {
         }
         return s;
     }
+    public static void ValidateToString(){
+        System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+                "ID","Tên sản phẩm","Mô tả sản phẩm","Giá tiền","Số lượng","Danh mục","Trạng thái");
+    }
+
 }

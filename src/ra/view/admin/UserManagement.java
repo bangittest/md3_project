@@ -6,6 +6,7 @@ import ra.model.account.RoleName;
 import ra.model.account.Users;
 import ra.reponsitory.UserReponsitory;
 import ra.service.UserService;
+import static ra.config.Color.*;
 
 import java.util.List;
 
@@ -17,18 +18,15 @@ public class UserManagement {
     public void menuUserManagement() {
 
         do {
-            System.out.println("Xin Chào " + users.getFullName());
-            System.out.println("╔══════════════════════════════════════════╗");
-            System.out.println("║              USER MANAGEMENT             ║");
-            System.out.println("╠══════════════════════════════════════════╣");
-            System.out.println("║ 1. Hiển thị danh sách khách hàng         ║");
-            System.out.println("║ 2. BLOCK tài khoản                       ║");
-            System.out.println("║ 3. Xóa tài khoản                         ║");
-            System.out.println("║ 4. Phân quyền                            ║");
-            System.out.println("║ 5. Tìm kiếm tên tài khoản khách hàng     ║");
-            System.out.println("║ 0. Quay lại                              ║");
-            System.out.println("╚══════════════════════════════════════════╝");
-            System.out.print("Mời lựa chọn (1/2/3/4/5/6/7/8): ");
+//            System.out.println("Xin Chào " + users.getFullName());
+            System.out.println("\u001B[35m╔════════════════════════════  USER MANAGEMENT  ═════════════════════════════╗");
+            System.out.println("\u001B[35m║                       \u001B[36m1. Hiển thị danh sách người dùng                     \u001B[35m║");
+            System.out.println("\u001B[35m║                       \u001B[36m2. Đổi trạng thái tài khoản                          \u001B[35m║");
+            System.out.println("\u001B[35m║                       \u001B[36m3. Phân quyền                                        \u001B[35m║");
+            System.out.println("\u001B[35m║                       \u001B[36m4. Tìm kiếm tên tài khoản khách hàng                 \u001B[35m║");
+            System.out.println("\u001B[35m║                       \u001B[31m0. Quay lại                                          \u001B[35m║");
+            System.out.println("\u001B[35m╚════════════════════════════════════════════════════════════════════════════╝" + RESET);
+            System.out.print("Mời lựa chọn (0/1/2/3/4): ");
             switch (Validate.validateInt()) {
                 case 1:
                     showUser();
@@ -37,12 +35,9 @@ public class UserManagement {
                     blockUser();
                     break;
                 case 3:
-                    deleteUser();
-                    break;
-                case 4:
                     rolesUser();
                     break;
-                case 5:
+                case 4:
                     searchUserName();
                     break;
                 case 0:
@@ -57,21 +52,25 @@ public class UserManagement {
     private void searchUserName() {
         System.out.println("Nhập tên tài khoản cần tìm kiếm : ");
         String searchUserName = Validate.validateString();
-        List<Users> searchUser = userReponsitory.findByName(searchUserName);
-        if (searchUser.isEmpty()) {
-            System.out.println("Không tìm thấy tên tài khoản hoặc danh sách bị rỗng");
-        } else {
-            System.out.println("Tất cả các tài khoản tìm thấy là:");
-            System.out.println(searchUser);
+        System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+                "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
+        boolean check=true;
+        for (Users user : userReponsitory.findAll()) {
+            if (user.getUsername().toLowerCase().contains(searchUserName)) {
+                System.out.println(user);
+                check = false;
+            }
         }
-
+        if (check){
+            System.out.println(RED+"Không tìm thấy tên tài khoản hoặc danh sách bị rỗng" +searchUserName+RESET);
+        }
     }
 
     private void rolesUser() {
         System.out.println("Nhập ID tài khoản cần phân quyền:");
         int idRoles = Validate.validateInt();
         if (idRoles == 0) {
-            System.out.println("ID không hợp lệ. Không thể chỉnh sửa.");
+            System.out.println(RED+"ID không hợp lệ. Không thể chỉnh sửa."+RESET);
             return;
         }
 
@@ -83,10 +82,10 @@ public class UserManagement {
 
         System.out.println(users);
 
-        System.out.println("Nhập mã xác thực để cấp quyền ADMIN (ví dụ: 'admin_key'): ");
-        String adminKey = Validate.validateString();
+//        System.out.println("Nhập mã xác thực để cấp quyền ADMIN (ví dụ: 'admin_key'): ");
+//        String adminKey = Validate.validateString();
 
-        if (adminKey.equals("admin")) { // Thay "admin_key" bằng mã xác thực thực sự
+//        if (adminKey.equals("admin")) { // Thay "admin_key" bằng mã xác thực thực sự
             System.out.println("Chọn vai trò (1: ADMIN, 2: USER): ");
             int choice = Validate.validateInt();
 
@@ -96,42 +95,77 @@ public class UserManagement {
                     String adminPassword = Validate.validateString();
 
                     if (adminPassword.equals("admin")) {
+                        System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+                                "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
+                        System.out.println(users);
                         users.setRoles(RoleName.ADMIN);
                         // Lưu vào cơ sở dữ liệu
                         userReponsitory.save(users);
                         System.out.println("Phân quyền ADMIN tài khoản thành công");
+                        System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+                                "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
+                        System.out.println(users);
                     } else {
-                        System.out.println("Mật khẩu xác nhận ADMIN không đúng. Không thể phân quyền ADMIN.");
+                        System.out.println(RED+"Mật khẩu xác nhận ADMIN không đúng. Không thể phân quyền ADMIN."+RESET);
                     }
                     break;
                 case 2:
+                    System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+                            "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
+                    System.out.println(users);
                     users.setRoles(RoleName.USER);
                     userReponsitory.save(users);
                     System.out.println("Phân quyền USER tài khoản thành công");
+                    System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+                            "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
+                    System.out.println(users);
                     break;
                 default:
                     System.out.println("Lựa chọn không hợp lệ. Phân quyền không thành công.");
             }
-        } else {
-            System.out.println("Mã xác thực không đúng. Không thể phân quyền ADMIN.");
-        }
+//        } else {
+//            System.out.println(RED+"Mã xác thực không đúng. Không thể phân quyền ADMIN."+RESET);
+//        }
     }
 
 
     private void deleteUser() {
-        System.out.println("Nhập id cần xóa tài khoản: ");
+        showUser();
+        System.out.println("Nhập ID cần xóa tài khoản: ");
         int idDelete = Validate.validateInt();
+
         if (idDelete == 0) {
-            System.out.println("ID không hợp lệ. Không thể chỉnh sửa.");
+            System.out.println(RED+"ID không hợp lệ. Không thể xóa."+RESET);
             return;
         }
-        Users users = userReponsitory.findById(idDelete);
-        if (users == null) {
-            System.out.println("Tài khoản cần sửa theo mã ID vừa nhập không tồn tại");
+
+        Users userToDelete = userReponsitory.findById(idDelete);
+
+        if (userToDelete == null) {
+            System.out.println(RED+"Tài khoản cần xóa theo mã ID vừa nhập không tồn tại"+RESET);
         } else {
-            userReponsitory.findById(idDelete);
+            while (true){
+                System.out.println("""
+                    Bạn có chắc chắn muốn xóa không?
+                    1.Có
+                    2.Không
+                    Mời bạn lựa chọn
+                    """);
+                // Xóa tài khoản người dùng
+                switch (Validate.validateInt()){
+                    case 1:
+                        userReponsitory.delete(idDelete);
+                        System.out.println("Xóa tài khoản thành công");
+                    case 2:
+                        return;
+                    default:
+                        System.out.println("Lựa chọn không hợp lệ");
+                        break;
+                }
+            }
         }
     }
+
 
     private void blockUser() {
         System.out.println("Nhập id tài khoản cần thay đổi trạng thái:");
@@ -149,33 +183,40 @@ public class UserManagement {
         if (users.getRoles()==RoleName.ADMIN){
             System.out.println("Tài khoản có quyền ADMIN. Không thể Block");
         } else {
+            System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+                    "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
             System.out.println(users);
-            users.setStatus(!users.isStatus());
-            userReponsitory.save(users);
-            System.out.println("Sửa trạng thái tài khoản thành công");
+           while (true){
+               System.out.println("""
+                    Bạn có chắc chắn thay đổi trạng thái không
+                    1.Có
+                    2.Không
+                    Mời bạn lựa chọn
+                    """);
+               switch (Validate.validateInt()){
+                   case 1:
+                       users.setStatus(!users.isStatus());
+                       userReponsitory.save(users);
+                       System.out.println("Sửa trạng thái tài khoản thành công");
+                       System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+                               "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
+                       System.out.println(users);
+                       break;
+                   case 2:
+                       return;
+                   default:
+                       System.out.println("Lựa chọn không hợp lệ");
+                       break;
+               }
+           }
         }
     }
-
-
-//    private void addUser() {
-//        System.out.println("Nhập số lượng tài khoản cần thêm :");
-//        int n=Validate.validateInt();
-//        for (int i = 0; i <n ; i++) {
-//            System.out.println("Nhập số lượng tài khoản: "+(i+1));
-//            Users users=new Users();
-//            users.setId(userReponsitory.getNewId());
-//            System.out.println("Nhập tên tài khoản :");
-//            users.setUsername(Validate.validateString());
-//            System.out.println("Nhập mật khẩu :");
-//            users.setPassword(Validate.validateString());
-//            userReponsitory.save(users);
-//        }
-//        System.out.println("Thêm mới thành công");
-//    }
 
     private void showUser() {
         if (userReponsitory.findAll().isEmpty()) System.out.println("Danh sách khách hàng rỗng");
         System.out.println("Tất cả danh sách khách hàng :");
+        System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+                "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
         for (Users user : userReponsitory.findAll()) {
             System.out.println(user);
         }

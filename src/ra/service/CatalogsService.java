@@ -77,13 +77,14 @@ public class CatalogsService implements CatalogsReponsitory {
         return matchingCatalogs;
     }
 
+
     @Override
-    public void sortCatalog() {
-        Collections.sort(catalogsList, new Comparator<Catalogs>() {
-            @Override
-            public int compare(Catalogs o1, Catalogs o2) {
-                return o1.getCatalogName().compareTo(o2.getCatalogName());
+    public boolean checkCatalog(String catalogName) {
+        for (Catalogs catalog : catalogsList) {
+            if (catalog.getCatalogName().equalsIgnoreCase(catalogName)){
+                return true;
             }
-        });
+        }
+        return false;
     }
 }

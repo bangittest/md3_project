@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CatalogsReponsitory extends Responsitory<Catalogs>{
     List<Catalogs> findByName(String catalogName);
-    void sortCatalog();
+    boolean checkCatalog(String catalogName);
 }

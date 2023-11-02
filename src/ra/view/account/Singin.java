@@ -1,4 +1,4 @@
-package ra.view.login;
+package ra.view.account;
 
 import ra.config.Config;
 import ra.config.Validate;
@@ -7,6 +7,7 @@ import ra.model.account.Users;
 import ra.reponsitory.UserReponsitory;
 import ra.service.UserService;
 import ra.view.admin.AdminManagement;
+import ra.view.home.MenuUser;
 
 public class Singin {
     UserReponsitory userReponsitory=new UserService();
@@ -38,8 +39,9 @@ public class Singin {
                 usersConfig.writeFile(Config.URL_USERS_LOGIN,users);
                 //chuyển trang user
 //                    new UserManagement().menuUserManagement();
-                System.out.println("chuyển trang người dùng");
-                System.out.println("Đăng nhập thành công");
+//                System.out.println("chuyển trang người dùng");
+//                System.out.println("Đăng nhập thành công");
+                new MenuUser().menuUser();
             }else {
                 System.out.println("Tài khoản bạn đã bị khóa");
             }

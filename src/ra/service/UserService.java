@@ -70,7 +70,7 @@ public class UserService implements UserReponsitory {
     }
 
     @Override
-    public Users checkLogin(String username, String password) {
+    public Users checkLogin(String username, String password ) {
         for (Users user : usersList) {
             if (user.getUsername().equals(username)&&user.getPassword().equals(password)){
                 return user;
@@ -99,14 +99,4 @@ public class UserService implements UserReponsitory {
         return false;
     }
 
-    @Override
-    public List<Users> findByName(String userName) {
-        List<Users> matchingUsers = new ArrayList<>();
-        for (Users users : usersList) {
-            if (users.getFullName().contains(userName)) {
-                matchingUsers.add(users);
-            }
-        }
-        return matchingUsers;
-    }
 }

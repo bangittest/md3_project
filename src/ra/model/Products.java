@@ -2,15 +2,21 @@ package ra.model;
 
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+
+import static ra.config.Color.RESET;
 
 public class Products implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int id;
     private String productName;
     private Catalogs categoryId;
     private String description;
     private double unitPrice;
     private int stock;
-    private boolean status;
+    private boolean status=true;
 
     public Products() {
     }
@@ -84,20 +90,16 @@ public class Products implements Serializable {
 
     @Override
     public String toString() {
-        String statusText = status ? "Đang hoạt động" : "Không hoạt động";
-
-        StringBuilder builder = new StringBuilder();
-        builder.append("================================ Products ================================\n");
-        builder.append(String.format("| %-15s: %d\n", "ID", id));
-        builder.append(String.format("| %-15s: %s\n", "Product Name", productName));
-        builder.append(String.format("| %-15s: %s\n", "Category", categoryId.getCatalogName()));
-        builder.append(String.format("| %-15s: %s\n", "Description", description));
-        builder.append(String.format("| %-15s: %f\n", "Unit Price", unitPrice));
-        builder.append(String.format("| %-15s: %d\n", "Stock", stock));
-        builder.append(String.format("| %-15s: %s\n", "Status", statusText));
-        builder.append("===========================================================================");
-
-        return builder.toString();
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        String format = "%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n";
+        System.out.println();
+        return String.format(format, id, productName, description, String.format(currencyFormat.format(unitPrice)), stock, categoryId.getCatalogName(), (status ? "Mở bán" : "Không mở bán"));
+    }
+    public String toShortString() {
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        String format = "%-10s %-20s %-20s %-20s %-20s";
+        System.out.println();
+        return String.format(format, id, productName, categoryId.getCatalogName(), description, String.format(currencyFormat.format(unitPrice)));
     }
 
 }

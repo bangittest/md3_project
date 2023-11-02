@@ -71,7 +71,7 @@ public class ProductService implements ProductReponsitory {
     public List<Products> findByName(String productName) {
         List<Products> matchingProducts = new ArrayList<>();
         for (Products product : productsList) {
-            if (product.getProductName().contains(productName)) {
+            if (product.getProductName().toLowerCase().contains(productName)) {
                 matchingProducts.add(product);
             }
         }
@@ -80,12 +80,25 @@ public class ProductService implements ProductReponsitory {
 
 
     @Override
-    public void sortProduct() {
-        Collections.sort(productsList, new Comparator<Products>() {
-            @Override
-            public int compare(Products o1, Products o2) {
-                return Double.compare(o1.getUnitPrice(),o2.getUnitPrice());
+    public boolean checkProductName(String productName) {
+        for (Products product:productsList) {
+            if (product.getProductName().equalsIgnoreCase(productName)){
+                return true;
             }
-        });
+        }
+        return false;
     }
+
+    @Override
+    public List<Products> findByCategoryId(int categoryId) {
+        List<Products> productsUpdateId = new ArrayList<>();
+
+        for (Products product : productsList) {
+            if (product.getCategoryId().getId() == categoryId) {
+                productsUpdateId.add(product);
+            }
+        }
+        return productsUpdateId;
+    }
+
 }

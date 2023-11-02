@@ -1,13 +1,14 @@
 package ra.model;
 
 public class OrderDetail {
-    private Long productId;
-    private Long orderId;
+    private static final long serialVersionUID = 1L;
+    private int productId;
+    private int orderId;
     private String name;
     private double unitPrice;
     private int quantity;
 
-    public OrderDetail(Long productId, Long orderId, String name, double unitPrice, int quantity) {
+    public OrderDetail(int productId, int orderId, String name, double unitPrice, int quantity) {
         this.productId = productId;
         this.orderId = orderId;
         this.name = name;
@@ -18,19 +19,19 @@ public class OrderDetail {
     public OrderDetail() {
     }
 
-    public Long getProductId() {
+    public int getProductId() {
         return productId;
     }
 
-    public void setProductId(Long productId) {
+    public void setProductId(int productId) {
         this.productId = productId;
     }
 
-    public Long getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Long orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
