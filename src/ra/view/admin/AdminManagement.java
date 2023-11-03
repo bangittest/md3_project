@@ -44,6 +44,7 @@ public class AdminManagement {
                             new UserManagement().menuUserManagement();
                             break;
                         case 4:
+                            new OrderManagement().menuOrderManagement();
                             break;
                         case 5:
                             profile();

@@ -13,6 +13,8 @@ import ra.reponsitory.UserReponsitory;
 import ra.service.CatalogsService;
 import ra.service.ProductService;
 import ra.service.UserService;
+import ra.view.cart.MenuCart;
+import ra.view.cart.MenuOrder;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,6 +26,9 @@ public class MenuUser {
     CatalogsReponsitory catalogsReponsitory=new CatalogsService();
     Config<Users> config = new Config<>();
     Users users = config.readFile(Config.URL_USERS_LOGIN);
+    Users usersChangepass = userReponsitory.findById(users.getId());
+
+    int userId = userReponsitory.findById(users.getId()).getId();
 
     public void menuUser() {
         do {
@@ -35,10 +40,11 @@ public class MenuUser {
             System.out.println("\u001B[35m║                                 \u001B[33mMENU HOME                                  \u001B[35m║");
             System.out.println("\u001B[35m║~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~║");
             System.out.println("\u001B[35m║                       \u001B[36m1. Tìm kiếm sản phẩm                                 \u001B[35m║");
-            System.out.println("\u001B[35m║                       \u001B[36m2. Hiển thị Cart                                     \u001B[35m║");
-            System.out.println("\u001B[35m║                       \u001B[36m3. Hiển thị sản phẩm nổi bật                         \u001B[35m║");
-            System.out.println("\u001B[35m║                       \u001B[36m4. Danh sách sản phẩm                                \u001B[35m║");
-            System.out.println("\u001B[35m║                       \u001B[36m5. Thông tin cá nhân                                 \u001B[35m║");
+            System.out.println("\u001B[35m║                       \u001B[36m2. Hiển thị sản phẩm nổi bật                         \u001B[35m║");
+            System.out.println("\u001B[35m║                       \u001B[36m3. Danh sách sản phẩm                                \u001B[35m║");
+            System.out.println("\u001B[35m║                       \u001B[36m4. Đặt hàng                                          \u001B[35m║");
+            System.out.println("\u001B[35m║                       \u001B[36m5. Giỏ hàng                                          \u001B[35m║");
+            System.out.println("\u001B[35m║                       \u001B[36m6. Thông tin cá nhân                                 \u001B[35m║");
             System.out.println("\u001B[35m║                       \u001B[31m0. Đăng xuất                                         \u001B[35m║");
             System.out.println("\u001B[35m╚════════════════════════════════════════════════════════════════════════════╝" + RESET);
             System.out.print("Mời lựa chọn (0/1/2/3/4/5): ");
@@ -50,15 +56,18 @@ public class MenuUser {
                     searchProducts();
                     break;
                 case 2:
-                    new Cart().menuCart();
-                    break;
-                case 3:
                     ShowProductNew();
                     break;
-                case 4:
+                case 3:
                     showProduct();
                     break;
+                case 4:
+                    new MenuOrder().addProductToCart();
+                    break;
                 case 5:
+                    new MenuCart().menuCart();
+                    break;
+                case 6:
                     new MenuProfile().menuProfile();
                     break;
                 default:

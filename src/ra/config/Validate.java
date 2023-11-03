@@ -1,6 +1,9 @@
 package ra.config;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
 
 import static ra.config.Color.RESET;
 
@@ -21,10 +24,14 @@ public class Validate {
     }
 
     //format tiền tệ
-    public static DecimalFormat formatVnd(){
-        return new DecimalFormat("###,###,###");
-    }
 
+    public static String formatCurrency(double amount) {
+        NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+
+        format.setCurrency(Currency.getInstance("VND"));
+
+        return format.format(amount);
+    }
 
     // Validate email
     public static String validateEmail(){

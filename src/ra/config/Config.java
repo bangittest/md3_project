@@ -20,6 +20,9 @@ public class Config<T> {
 
     public static final String URL_PRODUCTS_SORT = "src/ra/data/sorted_products.txt";
     public static final String URL_CATALOGS_SORT = "src/ra/data/sorted_catalogs.txt";
+    public static final String URL_CART = "src/ra/data/cart.txt";
+    public static final String URL_ORDER = "src/ra/data/order.txt";
+    public static final String URL_ORDERSDETAIL = "src/ra/data/ordersdetail.txt";
 
 
     public void writeFile(String PATH_FILE, T t) {

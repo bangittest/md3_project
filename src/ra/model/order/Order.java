@@ -1,51 +1,53 @@
 package ra.model.order;
 
-import ra.model.OrderDetail;
 
-import java.time.LocalDateTime;
+import ra.model.OrdersDetail;
+
+import java.io.Serializable;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Order {
-    private Long orderId;
-    private Long userId;
+
+public class Order implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private int orderId;
+    private int userId;
     private String name;
     private String phoneNumber;
+    private List<OrdersDetail>ordersDetails=new ArrayList<>();
     private String address;
-    private double total;
-    private OrderStatus orderStatus;
-    private List<OrderDetail> ordersDetails;
-    private LocalDateTime orderAt;
-    private LocalDateTime deliverAt;
 
-    public Order(Long orderId, Long userId, String name, String phoneNumber, String address, double total, OrderStatus orderStatus, List<OrderDetail> ordersDetails, LocalDateTime orderAt, LocalDateTime deliverAt) {
+    private double total;
+    private OrderStatus orderStatus=OrderStatus.PENDING;
+
+    public Order(int orderId, int userId, String name, String phoneNumber, List<OrdersDetail> ordersDetails, String address, double total, OrderStatus orderStatus) {
         this.orderId = orderId;
         this.userId = userId;
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.ordersDetails = ordersDetails;
         this.address = address;
         this.total = total;
         this.orderStatus = orderStatus;
-        this.ordersDetails = ordersDetails;
-        this.orderAt = orderAt;
-        this.deliverAt = deliverAt;
     }
 
     public Order() {
     }
 
-    public Long getOrderId() {
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Long orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -63,6 +65,14 @@ public class Order {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public List<OrdersDetail> getOrdersDetails() {
+        return ordersDetails;
+    }
+
+    public void setOrdersDetails(List<OrdersDetail> ordersDetails) {
+        this.ordersDetails = ordersDetails;
     }
 
     public String getAddress() {
@@ -89,30 +99,6 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
-    public List<OrderDetail> getOrdersDetails() {
-        return ordersDetails;
-    }
-
-    public void setOrdersDetails(List<OrderDetail> ordersDetails) {
-        this.ordersDetails = ordersDetails;
-    }
-
-    public LocalDateTime getOrderAt() {
-        return orderAt;
-    }
-
-    public void setOrderAt(LocalDateTime orderAt) {
-        this.orderAt = orderAt;
-    }
-
-    public LocalDateTime getDeliverAt() {
-        return deliverAt;
-    }
-
-    public void setDeliverAt(LocalDateTime deliverAt) {
-        this.deliverAt = deliverAt;
-    }
-
     @Override
     public String toString() {
         return "Order{" +
@@ -120,12 +106,17 @@ public class Order {
                 ", userId=" + userId +
                 ", name='" + name + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
+                ", ordersDetails=" + ordersDetails +
                 ", address='" + address + '\'' +
                 ", total=" + total +
                 ", orderStatus=" + orderStatus +
-                ", ordersDetails=" + ordersDetails +
-                ", orderAt=" + orderAt +
-                ", deliverAt=" + deliverAt +
                 '}';
     }
+    //    @Override
+//    public String toString() {
+//        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+//        String format = "%-10s %-10s %-10s %-10s %-10s %-10s %-10s %-10s %-10s %-10s";
+//        System.out.println();
+//        return String.format(format, orderId, userId, productId, productName, String.format(currencyFormat.format(total)),name,phoneNumber,quantity,address,orderStatus);
+//    }
 }

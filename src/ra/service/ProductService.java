@@ -101,4 +101,15 @@ public class ProductService implements ProductReponsitory {
         return productsUpdateId;
     }
 
+    @Override
+    public void updateStock(int productId, int newStock) {
+        for (Products product : productsList) {
+            if (product.getId() == productId) {
+                product.setStock(newStock);
+                updateData();
+                break; // Dừng sau khi đã tìm thấy sản phẩm cần cập nhật
+            }
+        }
+    }
+
 }
