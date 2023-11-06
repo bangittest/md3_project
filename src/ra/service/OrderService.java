@@ -25,22 +25,44 @@ public class OrderService implements OderReponsitory {
 
     @Override
     public void save(Order order) {
-        Order existingOrder = findById(order.getOrderId());
-        if (existingOrder == null) {
-            orderList.add(order);
-            updateData();
-        } else {
-            int index = orderList.indexOf(existingOrder);
-            orderList.set(index, order);
+//        orderList.add(order);
+//        config.writeFile(Config.URL_ORDER, findAll());
+//        updateData();
+        if (order != null) {
+            Order existingOrder = findById(order.getOrderId());
+            if (existingOrder == null) {
+                // Nếu đơn hàng chưa tồn tại, thêm nó vào danh sách
+                orderList.add(order);
+            } else {
+                // Nếu đơn hàng đã tồn tại, cập nhật thông tin của nó
+                int index = orderList.indexOf(existingOrder);
+                orderList.set(index, order);
+            }
+
+            // Lưu trạng thái mới của danh sách
             updateData();
         }
     }
+
 
     @Override
     public void delete(int id) {
         orderList.remove(findById(id));
         updateData();
     }
+//    public void update(Order order) {
+//        Order orderToUpdate = findById(order.getOrderId());
+//        if (orderToUpdate != null) {
+//            orderToUpdate.setName(order.getName());
+//            orderToUpdate.setPhoneNumber(order.getPhoneNumber());
+//            orderToUpdate.setAddress(order.getAddress());
+//            orderToUpdate.setTotal(order.getTotal());
+//            orderToUpdate.setOrderTime(order.getOrderTime());
+//            updateData();
+//        } else {
+//            System.out.println("Không tìm thấy đơn hàng có ID: " + order.getOrderId());
+//        }
+//    }
 
     @Override
     public Order findById(int id) {
@@ -66,5 +88,10 @@ public class OrderService implements OderReponsitory {
     @Override
     public void updateData() {
         config.writeFile(Config.URL_ORDER, orderList);
+    }
+
+    @Override
+    public void update(Order order) {
+
     }
 }

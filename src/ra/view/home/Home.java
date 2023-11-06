@@ -18,17 +18,17 @@ public class Home {
 
         do {
             System.out.println("\u001B[35m╔════════════════════════════════════════════════════════════════════════════╗");
-            System.out.println("\u001B[35m║                                                                            ║");
-            System.out.printf("\u001B[35m║                            \u001B[34m%-20s                           \u001B[35m║\n", "Xin chào đến với Shop");
-            System.out.println("\u001B[35m║                                                                            ║");
+            System.out.println("\u001B[35m║        (\\(\\                                                                ║");
+            System.out.println("\u001B[35m║        ( -.-)         Xin chào đến với Shop Ecommerce                      \u001B[35m║");
+            System.out.println("\u001B[35m║        o_(\")(\")                                                            ║");
             System.out.println("\u001B[35m║~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~║");
             System.out.println("\u001B[35m║                                 \u001B[33mMENU HOME                                  \u001B[35m║");
             System.out.println("\u001B[35m║~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~║");
-            System.out.println("\u001B[35m║                       \u001B[36m1. Đăng Nhập                                         \u001B[35m║");
-            System.out.println("\u001B[35m║                       \u001B[36m2. Đăng Ký                                           \u001B[35m║");
-            System.out.println("\u001B[35m║                       \u001B[31m0. Thoát                                             \u001B[35m║");
+            System.out.println("\u001B[35m║                              \u001B[36m1. Đăng Nhập                                  \u001B[35m║");
+            System.out.println("\u001B[35m║                              \u001B[36m2. Đăng Ký                                    \u001B[35m║");
+            System.out.println("\u001B[35m║                              \u001B[31m0. Thoát                                      \u001B[35m║");
             System.out.println("\u001B[35m╚════════════════════════════════════════════════════════════════════════════╝" + RESET);
-            System.out.print("Mời lựa chọn (0/1/2/3/4): ");
+            System.out.print("Mời lựa chọn (0/1/2): ");
             switch (Validate.validateInt()) {
                 case 1:
                     new Singin().login();

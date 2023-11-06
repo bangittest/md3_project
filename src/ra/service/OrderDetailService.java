@@ -37,6 +37,7 @@ public class OrderDetailService implements OrderDetailReponsitory {
     @Override
     public void delete(int id) {
         ordersDetailList.remove(findById(id));
+        updateData();
     }
 
     @Override

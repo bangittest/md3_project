@@ -97,9 +97,8 @@ public class Products implements Serializable {
     }
     public String toShortString() {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        String format = "%-10s %-20s %-20s %-20s %-20s";
-        System.out.println();
-        return String.format(format, id, productName, categoryId.getCatalogName(), description, String.format(currencyFormat.format(unitPrice)));
+
+        return String.format("%-10s %-20s %-20s %-20s %-20s", id, productName, categoryId.getCatalogName(), description, String.format(currencyFormat.format(unitPrice)));
     }
 
 }

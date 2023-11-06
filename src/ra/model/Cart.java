@@ -1,47 +1,46 @@
 package ra.model;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Cart implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private int id;
-    private int userId;
-    private Map<Products,Integer>Products = new HashMap<>();
+    private int idCart;
+    private int idUser;
+    private Map<Integer, Integer> productCart;
     private boolean status;
 
-    public Cart() {}
+    public Cart() {
+    }
 
-    public Cart(int id, int userId, Map<ra.model.Products, Integer> products, boolean status) {
-        this.id = id;
-        this.userId = userId;
-        Products = products;
+    public Cart(int idCart, int idUser, Map<Integer, Integer> productCart, boolean status) {
+        this.idCart = idCart;
+        this.idUser = idUser;
+        this.productCart = productCart;
         this.status = status;
     }
 
-    public int getId() {
-        return id;
+    public int getIdCart() {
+        return idCart;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdCart(int idCart) {
+        this.idCart = idCart;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getIdUser() {
+        return idUser;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 
-    public Map<ra.model.Products, Integer> getProducts() {
-        return Products;
+    public Map<Integer, Integer> getProductCart() {
+        return productCart;
     }
 
-    public void setProducts(Map<ra.model.Products, Integer> products) {
-        Products = products;
+    public void setProductCart(Map<Integer, Integer> productCart) {
+        this.productCart = productCart;
     }
 
     public boolean isStatus() {
@@ -54,11 +53,9 @@ public class Cart implements Serializable {
 
     @Override
     public String toString() {
-        return "Cart{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", Products=" + Products +
-                ", status=" + status +
-                '}';
+        return "IdCart = " + idCart +
+                " -  IdUser=" + idUser +
+                " - ProductCart=" + productCart +
+                " -  Status=" + (status ? "Đã thanh toán" : "Chưa thanh toán");
     }
 }

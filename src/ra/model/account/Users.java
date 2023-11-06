@@ -97,8 +97,6 @@ public class Users implements Serializable {
 
     @Override
     public String toString() {
-        String format = "%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n";
-        System.out.println();
-        return String.format(format, id, username, email, fullName, status, roles, phoneNumber);
+        return String.format("%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n", id, username, email, fullName, (status?"Đang hoạt động":"Đang bị khóa"), roles, phoneNumber);
     }
 }

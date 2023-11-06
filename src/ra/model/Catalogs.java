@@ -56,9 +56,8 @@ public class Catalogs implements Serializable {
 
     @Override
     public String toString() {
-        String format = "%-10s %-20s %-20s %-20s%n";
-        System.out.println();
-        return String.format(format, id, catalogName, description, (status ? "Đang hoạt động" : "Không hoạt động"));
+
+        return String.format("%-10s %-20s %-20s %-20s%n", id, catalogName, description, (status ? "Đang hoạt động" : "Không hoạt động"));
     }
 
 }

@@ -10,11 +10,7 @@ import ra.reponsitory.ProductReponsitory;
 import ra.service.CatalogsService;
 import ra.service.ProductService;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -43,8 +39,6 @@ public class ProductManagement {
             System.out.println("\u001B[31m║                        0. Quay lại                                         ║");
             System.out.println("\u001B[33m╚════════════════════════════════════════════════════════════════════════════╝");
             System.out.print("\u001B[33mMời lựa chọn (0/1/2/3/4/5/6/): ");
-
-
             System.out.println(RESET);
             switch (Validate.validateInt()) {
                 case 1:
@@ -100,7 +94,7 @@ public class ProductManagement {
                         System.out.println("Sửa trạng thái sản phẩm thành công");
                         Validate.ValidateToString();
                         System.out.println(productsEdit);
-                        break;
+                        return;
                     case 2:
                         return;
                     default:
@@ -350,7 +344,7 @@ public class ProductManagement {
                 products.setDescription(Validate.validateString());
                 while (true) {
                     System.out.print("Nhập giá sản phẩm: ");
-                    String input = Config.scanner().nextLine();
+                    String input = Validate.validateString();
 
                     try {
                         double unitPrice = Double.parseDouble(input);

@@ -4,13 +4,15 @@ package ra.model.order;
 import ra.model.OrdersDetail;
 
 import java.io.Serializable;
-import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
+
     private int orderId;
     private int userId;
     private String name;
@@ -19,20 +21,20 @@ public class Order implements Serializable {
     private String address;
 
     private double total;
-    private OrderStatus orderStatus=OrderStatus.PENDING;
+    private OrderStatus orderStatus=OrderStatus.WAITING;
+    private LocalDateTime orderTime;
 
-    public Order(int orderId, int userId, String name, String phoneNumber, List<OrdersDetail> ordersDetails, String address, double total, OrderStatus orderStatus) {
-        this.orderId = orderId;
-        this.userId = userId;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.ordersDetails = ordersDetails;
-        this.address = address;
-        this.total = total;
-        this.orderStatus = orderStatus;
-    }
+
 
     public Order() {
+        this.orderTime = LocalDateTime.now();
+    }
+    public LocalDateTime getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(LocalDateTime orderTime) {
+        this.orderTime = orderTime;
     }
 
     public int getOrderId() {
@@ -101,22 +103,15 @@ public class Order implements Serializable {
 
     @Override
     public String toString() {
-        return "Order{" +
-                "orderId=" + orderId +
-                ", userId=" + userId +
-                ", name='" + name + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", ordersDetails=" + ordersDetails +
-                ", address='" + address + '\'' +
-                ", total=" + total +
-                ", orderStatus=" + orderStatus +
-                '}';
+        return "" +
+                "\nĐơn hàng=" + orderId +
+//                ", \nTên khách hàng='" + name + '\'' +
+//                ", \nĐiện thoại='" + phoneNumber + '\'' +
+//                ", \nĐịa chỉ='" + address + '\'' +
+//                ", \nTổng tiền đơn hàng=" + total +
+//                ", \nTrạng thái đơn hàng=" + orderStatus +
+//                ", \nThời gian đặt hàng=" +orderTime +
+                "";
     }
-    //    @Override
-//    public String toString() {
-//        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-//        String format = "%-10s %-10s %-10s %-10s %-10s %-10s %-10s %-10s %-10s %-10s";
-//        System.out.println();
-//        return String.format(format, orderId, userId, productId, productName, String.format(currencyFormat.format(total)),name,phoneNumber,quantity,address,orderStatus);
-//    }
+
 }

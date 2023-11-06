@@ -14,15 +14,13 @@ public class CartService implements CartReponsitory {
 
 
     static Config<List<Cart>> config = new Config<>();
-    public static List<Cart> cartList;
-
+    static List<Cart> cartList;
     static {
         cartList = config.readFile(Config.URL_CART);
-        if (cartList == null) {
+        if (cartList == null){
             cartList = new ArrayList<>();
         }
     }
-
     @Override
     public List<Cart> findAll() {
         return cartList;
@@ -30,25 +28,24 @@ public class CartService implements CartReponsitory {
 
     @Override
     public void save(Cart cart) {
-        Cart oldCart = findById(cart.getId());
-        if (oldCart == null) {
+        if (findById(cart.getIdCart()) == null){
             cartList.add(cart);
-        } else {
-            oldCart.setProducts(cart.getProducts());
+            updateData();
+        }else {
+            cartList.set(cartList.indexOf(cart),cart);
+            updateData();
         }
-        updateData();
     }
 
     @Override
     public void delete(int id) {
         cartList.remove(findById(id));
-        updateData();
     }
 
     @Override
     public Cart findById(int id) {
-        for (Cart cart : cartList) {
-            if (cart.getId() == id) {
+        for (Cart cart : cartList){
+            if (cart.getIdCart() == id){
                 return cart;
             }
         }
@@ -59,28 +56,28 @@ public class CartService implements CartReponsitory {
     public int getNewId() {
         int idMax = 0;
         for (Cart cart : cartList) {
-            if (cart.getId() > idMax) {
-                idMax = cart.getId();
+            if (cart.getIdCart() > idMax){
+                idMax = cart.getIdCart();
             }
         }
-        return idMax + 1;
+        return (idMax + 1);
     }
 
     @Override
     public void updateData() {
-        config.writeFile(Config.URL_CART, cartList);
+        config.writeFile(Config.URL_CART,cartList);
     }
 
     @Override
     public Cart getCartInfo(int cartId) {
-        return findById(cartId);
+        return null;
     }
 
     @Override
     public Cart findCartByUserLogin() {
         Users userLogin = new Config<Users>().readFile(Config.URL_USERS_LOGIN);
         for (Cart cart : cartList) {
-            if (cart.getUserId() == userLogin.getId() && !cart.isStatus()){
+            if (cart.getIdUser() == userLogin.getId() && !cart.isStatus()){
                 return  cart;
             }
         }

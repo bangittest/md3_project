@@ -18,9 +18,9 @@ public class AdminManagement {
     public void menuAdmin() {
                 do {
                     System.out.println("\u001B[35m╔════════════════════════════════════════════════════════════════════════════╗");
-                    System.out.println("\u001B[35m║        /\\_/\\                                                               ║");
-                    System.out.printf("\u001B[35m║       ( o.o )                Xin chào: \u001B[34m%-20s                \u001B[35m║\n", users.getFullName());
-                    System.out.println("\u001B[35m║        > ^ <                                                               ║");
+                    System.out.println("\u001B[35m║        (\\(\\                                                                ║");
+                    System.out.printf("\u001B[35m║        ( -.-)                Xin chào: \u001B[34m%-20s                \u001B[35m║\n", users.getFullName());
+                    System.out.println("\u001B[35m║        o_(\")(\")                                                            ║");
                     System.out.println("\u001B[35m║~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~║");
                     System.out.println("\u001B[35m║                                 \u001B[33mADMIN HOME                                 \u001B[35m║");
                     System.out.println("\u001B[35m║                      \u001B[33mThời gian:  " + getCurrentTime() +"                       \u001B[35m║");

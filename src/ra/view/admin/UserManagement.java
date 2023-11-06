@@ -201,7 +201,7 @@ public class UserManagement {
                        System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
                                "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
                        System.out.println(users);
-                       break;
+                       return;
                    case 2:
                        return;
                    default:

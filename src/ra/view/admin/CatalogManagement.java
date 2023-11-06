@@ -98,7 +98,7 @@ public class CatalogManagement {
                      System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s%n" + RESET,
                              "ID", "Tên danh mục", "Mô tả", "Trạng thái");
                      System.out.println(catalogsEdit);
-                     break;
+                     return;
                  case 2:
                      return;
                  default:
