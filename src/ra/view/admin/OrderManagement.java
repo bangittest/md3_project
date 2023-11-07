@@ -12,14 +12,16 @@ import ra.service.ProductService;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static ra.config.Color.RED;
-import static ra.config.Color.RESET;
+import static java.util.Collections.*;
+import static ra.config.Color.*;
 
 public class OrderManagement {
-    ProductReponsitory productReponsitory=new ProductService();
-    OderReponsitory oderReponsitory=new OrderService();
+    ProductReponsitory productReponsitory = new ProductService();
+    OderReponsitory oderReponsitory = new OrderService();
+
     public void menuOrderManagement() {
         do {
             System.out.println("\u001B[35m╔════════════════════════════  ORDER MANAGEMENT  ════════════════════════════╗");
@@ -59,28 +61,6 @@ public class OrderManagement {
                 System.out.println("1. Xác nhận đơn hàng");
                 System.out.println("2. Hủy đơn hàng");
                 switch (Validate.validateInt()) {
-                    case 2:
-                        // Lưu trạng thái hiện tại của đơn hàng trước khi hủy
-                        OrderStatus currentStatus = orderList.getOrderStatus();
-                        // Cập nhật trạng thái đơn hàng thành CANCELED
-                        orderList.setOrderStatus(OrderStatus.CANCEL);
-                        oderReponsitory.save(orderList);
-                        System.out.println("Đã hủy đơn hàng thành công");
-
-
-                        // Nếu đơn hàng đã ở trạng thái PENDING, thì cập nhật số lượng tồn kho
-                        if (currentStatus == OrderStatus.WAITING) {
-                            // Duyệt qua các sản phẩm trong đơn hàng để cộng số lượng đã hủy vào số lượng tồn kho
-                            for (OrdersDetail orderDetail : orderList.getOrdersDetails()) {
-                                Products product = productReponsitory.findById(orderDetail.getProductId());
-                                int quantityToCancel = orderDetail.getQuantity();
-                                int currentStock = product.getStock();
-                                product.setStock(currentStock + quantityToCancel);
-                                // Cập nhật số lượng tồn kho của sản phẩm trong cơ sở dữ liệu
-                                productReponsitory.updateStock(product.getId(), currentStock + quantityToCancel);
-                            }
-                        }
-                        break;
                     case 1:
                         orderList.setOrderStatus(OrderStatus.CONFIRM);
                         oderReponsitory.save(orderList);
@@ -88,17 +68,51 @@ public class OrderManagement {
                         // Bắt đầu tính thời gian và tự động cập nhật trạng thái
                         scheduleDeliveryUpdate(orderList);
                         break;
+                    case 2:
+                        System.out.println("Bạn có chắc chắn muốn hủy không");
+                        System.out.println("1.Đồng ý");
+                        System.out.println("2.Quay lại");
+                        switch (Validate.validateInt()) {
+                            case 1:
+                                // Lưu trạng thái hiện tại của đơn hàng trước khi hủy
+                                OrderStatus currentStatus = orderList.getOrderStatus();
+                                // Cập nhật trạng thái đơn hàng thành CANCEL
+                                orderList.setOrderStatus(OrderStatus.CANCEL);
+                                oderReponsitory.save(orderList);
+                                System.out.println("Đã hủy đơn hàng thành công");
+
+
+                                // Nếu đơn hàng đã ở trạng thái Waiting, thì cập nhật số lượng tồn kho
+                                if (currentStatus.equals(OrderStatus.WAITING)) {
+                                    // Duyệt qua các sản phẩm trong đơn hàng để cộng số lượng đã hủy vào số lượng tồn kho
+                                    // Cập nhật số lượng tồn kho của sản phẩm trong cơ sở dữ liệu
+                                    orderList.getOrdersDetails().forEach(orderDetail -> {
+                                        Products product = productReponsitory.findById(orderDetail.getProductId());
+                                        int quantityToCancel = orderDetail.getQuantity();
+                                        int currentStock = product.getStock();
+                                        product.setStock(currentStock + quantityToCancel);
+                                        productReponsitory.updateStock(product.getId(), currentStock + quantityToCancel);
+                                    });
+                                }
+                                break;
+                            case 2:
+                                return;
+                            default:
+                                System.out.println("Lựa chọn không hợp lí mời nhập lại");
+                                break;
+                        }
+                        break;
                     default:
                         System.out.println("Lựa chọn không hợp lệ, vui lòng nhập lại.");
 
                 }
-            } else if (orderList.getOrderStatus() == OrderStatus.CONFIRM ) {
+            } else if (orderList.getOrderStatus() == OrderStatus.CONFIRM) {
                 System.out.println("Không thể thay đổi trạng thái đơn hàng đã xác nhận.");
             } else if (orderList.getOrderStatus() == OrderStatus.CANCEL) {
                 System.out.println("Không thể thay đổi trạng thái đơn hàng đã hủy.");
-            } else if (orderList.getOrderStatus() == OrderStatus.DELIVERY){
-                System.out.println("Đơn hàng đang vận chuyển");
-            }else {
+            } else if (orderList.getOrderStatus() == OrderStatus.DELIVERY) {
+                System.out.println(YELLOW + "Đơn hàng đang vận chuyển" + RESET);
+            } else {
                 System.out.println("Trạng thái đơn hàng không hợp lệ.");
             }
         }
@@ -117,12 +131,12 @@ public class OrderManagement {
                     if (minutesPassed >= 5) {
                         order.setOrderStatus(OrderStatus.DELIVERY);
                         oderReponsitory.save(order);
-                        System.out.println("Đã cập nhật trạng thái đơn hàng thành DELIVERY.");
+                        System.out.println(YELLOW + "Đơn hàng " + order.getOrderId() + " đang vận chuyển." + RESET);
                         timer.cancel(); // Dừng timer sau khi cập nhật trạng thái
                     }
                 }
             }
-        }, 0, 60000); // Kiểm tra mỗi 1 phút (60.000 miliseconds)
+        }, 0, 1800000); // Kiểm tra mỗi 1 phút (60.000 miliseconds)
     }
 
 
@@ -134,33 +148,51 @@ public class OrderManagement {
             System.out.println("Không có đơn hàng nào.");
         } else {
             // Sắp xếp danh sách đơn hàng dựa trên thời gian
-            Collections.sort(orderList, new Comparator<Order>() {
-                @Override
-                public int compare(Order order1, Order order2) {
-                    return order1.getOrderTime().compareTo(order2.getOrderTime());
-                }
-            });
+
+            sort(orderList,
+                    (order1, order2) -> order1.getOrderTime().compareTo(order2.getOrderTime()));
 
             for (Order order : orderList) {
-                System.out.println("Đơn hàng:"  +order.getOrderId());
-                System.out.println("Tên khách hàng: " + order.getName());
-                System.out.println("Điện thoại: " + order.getPhoneNumber());
-                System.out.println("Địa chỉ: " + order.getAddress());
-                System.out.println("Thời gian đặt hàng: " + order.getOrderTime());
+                LocalDateTime orderTime = order.getOrderTime();
 
-                System.out.println("Chi tiết đơn hàng:");
-                List<OrdersDetail> orderDetails = order.getOrdersDetails();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                String formattedOrderTime = orderTime.format(formatter);
+                for (String s : Arrays.asList("Đơn hàng:" + order.getOrderId(), "Tên khách hàng: " + order.getName(), "Điện thoại: " + order.getPhoneNumber(), "Địa chỉ: " + order.getAddress(), "Thời gian đặt hàng: " + formattedOrderTime, "Chi tiết đơn hàng:")) {
+                    System.out.println(s);
+                }
 
-                for (OrdersDetail orderDetail : orderDetails) {
+                List<OrdersDetail> orderDetails;
+                orderDetails = order.getOrdersDetails();
+
+                orderDetails.forEach(orderDetail -> {
                     Products product = productReponsitory.findById(orderDetail.getProductId());
-
                     System.out.println("Sản phẩm: " + product.getProductName());
                     System.out.println("Số lượng: " + orderDetail.getQuantity());
                     System.out.println("Giá tiền: " + Validate.formatCurrency(orderDetail.getUnitPrice()));
-                }
+                });
 
-                System.out.println("Tổng tiền đơn hàng: " + Validate.formatCurrency(order.getTotal()));
-                System.out.println("Trạng thái đơn hàng: " + order.getOrderStatus());
+                System.out.printf("Tổng tiền đơn hàng: %s%n", Validate.formatCurrency(order.getTotal()));
+//                System.out.println("Trạng thái đơn hàng: " + order.getOrderStatus());
+                System.out.print("Trạng thái đơn hàng: ");
+                String orderStatus = String.valueOf(order.getOrderStatus());
+
+                switch (orderStatus) {
+                    case "WAITING":
+                        System.out.println("Đang chờ");
+                        break;
+                    case "CONFIRM":
+                        System.out.println("Đã xác nhận");
+                        break;
+                    case "DELIVERY":
+                        System.out.println("Đang giao hàng");
+                        break;
+                    case "CANCEL":
+                        System.out.println("Đã hủy đơn hàng");
+                        break;
+                    default:
+                        System.out.println("Trạng thái không xác định");
+                        break;
+                }
                 System.out.println("--------------------------------------------------------------------------------");
             }
         }

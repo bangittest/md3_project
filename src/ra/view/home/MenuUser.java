@@ -29,7 +29,7 @@ public class MenuUser {
     Config<Users> config = new Config<>();
     Users users = config.readFile(Config.URL_USERS_LOGIN);
     CartReponsitory cartReponsitory = new CartService();
-    OderReponsitory oderReponsitory=new OrderService();
+    OderReponsitory oderReponsitory = new OrderService();
 
 
     public void menuUser() {
@@ -62,8 +62,8 @@ public class MenuUser {
                     showProduct();
                     break;
                 case 3:
-                ShowProductNew();
-                break;
+                    ShowProductNew();
+                    break;
                 case 5:
                     new AddCart().AddCart();
                     break;
@@ -84,9 +84,23 @@ public class MenuUser {
     }
 
     private void showCart() {
+//        Cart cart1 = cartReponsitory.findCartByUserLogin();
+//        Map<Integer, Integer> productsInCart = cart1.getProductCart();
+//        double totalAmount = 0;
+//        for (Map.Entry<Integer, Integer> entry : productsInCart.entrySet()) {
+//            int productId = entry.getKey();
+//            int quantity = entry.getValue();
+//            Products product = productReponsitory.findById(productId);
+//            if (product != null) {
+//                double price = product.getUnitPrice();
+//                double subtotal = quantity * price;
+//                totalAmount += subtotal;
+//            }
+//        }
+
         // Hiển thị danh sách các sản phẩm đang có trong giỏ hàng
         System.out.println(".--------------------------------------------------------------------------------.");
-        System.out.println("|                                       CART                                     |");
+        System.out.println("|                                     Giỏ hàng                                   |");
         System.out.println("|--------------------------------------------------------------------------------|");
         System.out.printf("| %s   |               %s             |  %s  |          %s         |\n", "Mã SP", "Tên SP", "SỐ LƯỢNG", "GIÁ");
         System.out.println("|--------------------------------------------------------------------------------|");
@@ -104,7 +118,6 @@ public class MenuUser {
                     idPro, products.getProductName(), cart.getProductCart().get(idPro), Validate.formatCurrency(unitPrice));
         }
         System.out.println("'--------------------------------------------------------------------------------'");
-        System.out.println("Tổng tiền: ");
         System.out.println(".--------------------------------------------------------------------------------.");
         System.out.println("|   1.Thanh toán  |  2.Thay đổi SL  |   3.Xóa SP  |  4.Đơn Mua  |   5.Quay lại   |");
         System.out.println("'--------------------------------------------------------------------------------'");
@@ -138,16 +151,28 @@ public class MenuUser {
             Map<Integer, Integer> productsInCart = cart.getProductCart();
 
             if (productsInCart.containsKey(productId)) {
-                System.out.println("Số lượng hiện tại của sản phẩm có ID " + productId + " là: " + productsInCart.get(productId));
-                System.out.println("Nhập số lượng mới:");
-                int newQuantity = Validate.validateInt();
+                Products product = productReponsitory.findById(productId);
+                if (product != null) {
+                    int currentQuantity = productsInCart.get(productId);
+                    int stock = product.getStock();
 
-                if (newQuantity <= 0) {
-                    System.out.println("Số lượng phải lớn hơn 0.");
+                    System.out.println("Số lượng hiện tại của sản phẩm có ID " + productId + " trong giỏ hàng là: " + currentQuantity);
+                    System.out.println("Số lượng hiện tại trong kho là: " + stock);
+
+                    System.out.println("Nhập số lượng mới:");
+                    int newQuantity = Validate.validateInt();
+
+                    if (newQuantity <= 0) {
+                        System.out.println("Số lượng phải lớn hơn 0.");
+                    } else if (newQuantity <= stock) {
+                        productsInCart.put(productId, newQuantity);
+                        cartReponsitory.save(cart);
+                        System.out.println("Đã cập nhật số lượng sản phẩm trong giỏ hàng thành công.");
+                    } else {
+                        System.out.println("Không đủ số lượng sản phẩm trong kho.");
+                    }
                 } else {
-                    productsInCart.put(productId, newQuantity);
-                    cartReponsitory.save(cart);
-                    System.out.println("Đã cập nhật số lượng sản phẩm thành công.");
+                    System.out.println("Không tìm thấy sản phẩm có ID " + productId);
                 }
             } else {
                 System.out.println("Không tìm thấy sản phẩm có ID " + productId + " trong giỏ hàng.");
@@ -179,15 +204,15 @@ public class MenuUser {
     }
 
 
-
-
-
     private void searchCatalog() {
         System.out.println("Mời bạn chọn danh mục:");
 
         // Hiển thị danh sách danh mục
         for (int i = 0; i < catalogsReponsitory.findAll().size(); i++) {
-            System.out.println((i + 1) + ". " + catalogsReponsitory.findAll().get(i).getCatalogName());
+            if (catalogsReponsitory.findAll().get(i).isStatus()) {
+                System.out.println((i + 1) + ". " + catalogsReponsitory.findAll().get(i).getCatalogName());
+            }
+
         }
         int choice = Validate.validateInt();
         if (choice >= 1 && choice <= catalogsReponsitory.findAll().size()) {
@@ -286,9 +311,12 @@ public class MenuUser {
                 "ID", "Tên sản phẩm", "Danh mục", "Mô tả sản phẩm", "Giá sản phẩm");
         boolean check = true;
         for (Products products : productReponsitory.findAll()) {
-            if (products.getProductName().contains(searchKey)) {
-                System.out.println(products.toShortString());
-                check = false;
+
+            if (products.isStatus()) {
+                if (products.getProductName().toLowerCase().contains(searchKey)) {
+                    System.out.println(products.toShortString());
+                    check = false;
+                }
             }
         }
         if (check) {

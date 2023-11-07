@@ -76,7 +76,7 @@ public class UserManagement {
 
         Users users = userReponsitory.findById(idRoles);
         if (users == null) {
-            System.out.println("Tài khoản cần sửa theo mã ID vừa nhập không tồn tại");
+            System.out.println(RED+"Tài khoản cần sửa theo mã ID vừa nhập không tồn tại"+RESET);
             return;
         }
 
@@ -86,7 +86,7 @@ public class UserManagement {
 //        String adminKey = Validate.validateString();
 
 //        if (adminKey.equals("admin")) { // Thay "admin_key" bằng mã xác thực thực sự
-            System.out.println("Chọn vai trò (1: ADMIN, 2: USER): ");
+            System.out.println("Chọn vai trò (1: ADMIN ,0:Thoát): ");
             int choice = Validate.validateInt();
 
             switch (choice) {
@@ -109,19 +109,21 @@ public class UserManagement {
                         System.out.println(RED+"Mật khẩu xác nhận ADMIN không đúng. Không thể phân quyền ADMIN."+RESET);
                     }
                     break;
-                case 2:
-                    System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
-                            "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
-                    System.out.println(users);
-                    users.setRoles(RoleName.USER);
-                    userReponsitory.save(users);
-                    System.out.println("Phân quyền USER tài khoản thành công");
-                    System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
-                            "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
-                    System.out.println(users);
-                    break;
+                case 0:
+                    return;
+//                case 2:
+//                    System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+//                            "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
+//                    System.out.println(users);
+//                    users.setRoles(RoleName.USER);
+//                    userReponsitory.save(users);
+//                    System.out.println("Phân quyền USER tài khoản thành công");
+//                    System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+//                            "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
+//                    System.out.println(users);
+//                    break;
                 default:
-                    System.out.println("Lựa chọn không hợp lệ. Phân quyền không thành công.");
+                    System.out.println(RED+"Lựa chọn không hợp lệ. Phân quyền không thành công."+RESET);
             }
 //        } else {
 //            System.out.println(RED+"Mã xác thực không đúng. Không thể phân quyền ADMIN."+RESET);
@@ -181,7 +183,7 @@ public class UserManagement {
             return;
         }
         if (users.getRoles()==RoleName.ADMIN){
-            System.out.println("Tài khoản có quyền ADMIN. Không thể Block");
+            System.out.println("Tài khoản có quyền ADMIN. Không thể khóa");
         } else {
             System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
                     "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");

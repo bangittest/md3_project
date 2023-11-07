@@ -30,9 +30,7 @@ public class CheckOut {
             System.out.println("Giỏ hàng trống, không thể thanh toán.");
             return;
         }
-
         Map<Integer, Integer> productsInCart = cart.getProductCart();
-
         if (productsInCart.isEmpty()) {
             System.out.println("Giỏ hàng đang trống, không thể thanh toán.");
             return;
@@ -50,22 +48,25 @@ public class CheckOut {
             int quantity = entry.getValue();
 
             Products product = productReponsitory.findById(productId);
-
             if (product != null) {
-                int stock = product.getStock();
+                if (product.isStatus()){
+                    int stock = product.getStock();
 
-                // Kiểm tra số lượng tồn kho
-                if (quantity > stock) {
-                    System.out.println("Sản phẩm " + product.getProductName() + " không đủ số lượng tồn kho.");
+                    // Kiểm tra số lượng tồn kho
+                    if (quantity > stock) {
+                        System.out.println("Sản phẩm " + product.getProductName() + " không đủ số lượng tồn kho.");
+                        return;
+                    }
+                    double price = product.getUnitPrice();
+                    double subtotal = quantity * price;
+                    totalAmount += subtotal;
+                    System.out.printf("|  %4d   |        %-20s      |   %-7s  |      %-16s|\n",
+                            productId, product.getProductName(), quantity, Validate.formatCurrency(price));
+                    System.out.println("'--------------------------------------------------------------------------------'");
+                }else {
+                    System.out.println("Sản phẩm " + product.getProductName() + " không còn hoạt động để thanh toán.");
                     return;
                 }
-                double price = product.getUnitPrice();
-                double subtotal = quantity * price;
-                totalAmount += subtotal;
-                System.out.printf("|  %4d   |          %s         |     %s     |        %s       |\n",
-                        productId, product.getProductName(), quantity, Validate.formatCurrency(price));
-
-//                System.out.printf("|%4d   |     %-7s|     %-4d   |%12.2f  |\n", productId, product.getProductName(), quantity, price);
             }
         }
 
