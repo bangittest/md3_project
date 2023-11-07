@@ -9,7 +9,9 @@ import ra.service.UserService;;
 public class Singnup {
     UserReponsitory userReponsitory=new UserService();
     public void register() {
-        System.out.println("***FORM REGISTER***");
+        System.out.println("+-------------------------------------------------+");
+        System.out.println("| ****************** Đăng Ký ******************** |");
+        System.out.println("+-------------------------------------------------+");
         Users users = new Users();
         users.setId(userReponsitory.getNewId());
         System.out.println("Nhập họ và tên :");

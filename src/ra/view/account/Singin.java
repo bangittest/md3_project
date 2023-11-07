@@ -17,9 +17,9 @@ public class Singin {
     UserReponsitory userReponsitory=new UserService();
     Config<Users>usersConfig=new Config<>();
     public void login() {
-        System.out.println("+------------------+");
-        System.out.println("| ***FORM LOGIN*** |");
-        System.out.println("+------------------+");
+        System.out.println("+-------------------------------------------------+");
+        System.out.println("| ******************Đăng nhập******************** |");
+        System.out.println("+-------------------------------------------------+");
         System.out.println("Nhập tài khoản :");
         String username= Validate.validateString();
         System.out.println("Nhập mật khẩu");

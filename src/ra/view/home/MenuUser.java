@@ -43,7 +43,7 @@ public class MenuUser {
             System.out.println("\u001B[35m║~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~║");
             System.out.println("\u001B[35m║                       \u001B[36m1. Lọc theo danh mục                                 \u001B[35m║");
             System.out.println("\u001B[35m║                       \u001B[36m2. Tìm kiếm sản phẩm                                 \u001B[35m║");
-            System.out.println("\u001B[35m║                       \u001B[36m3. Hiển thị sản phẩm nổi bật                         \u001B[35m║");
+            System.out.println("\u001B[35m║                       \u001B[36m3. Hiển thị sản phẩm nổi bật theo giá giảm dần       \u001B[35m║");
             System.out.println("\u001B[35m║                       \u001B[36m4. Danh sách sản phẩm                                \u001B[35m║");
             System.out.println("\u001B[35m║                       \u001B[36m5. Đặt hàng                                          \u001B[35m║");
             System.out.println("\u001B[35m║                       \u001B[36m6. Giỏ hàng                                          \u001B[35m║");
@@ -59,11 +59,11 @@ public class MenuUser {
                     searchProducts();
                     break;
                 case 4:
-                    ShowProductNew();
-                    break;
-                case 3:
                     showProduct();
                     break;
+                case 3:
+                ShowProductNew();
+                break;
                 case 5:
                     new AddCart().AddCart();
                     break;
@@ -99,13 +99,14 @@ public class MenuUser {
         }
         for (int idPro : cart.getProductCart().keySet()) {
             Products products = productReponsitory.findById(idPro);
-            System.out.printf("|  %4d   |          %s         |     %s     |        %s       |\n",
-                    idPro, products.getProductName(), cart.getProductCart().get(idPro), products.getUnitPrice());
+            double unitPrice = products.getUnitPrice();
+            System.out.printf("|  %4d   |        %-20s      |   %-7s  |      %-16s|\n",
+                    idPro, products.getProductName(), cart.getProductCart().get(idPro), Validate.formatCurrency(unitPrice));
         }
         System.out.println("'--------------------------------------------------------------------------------'");
         System.out.println("Tổng tiền: ");
         System.out.println(".--------------------------------------------------------------------------------.");
-        System.out.println("|   1.Thanh toán  |  2.Thay đổi SL  | 3.Xóa SP    | 4.LS Đơn Hàng | 5.Quay lại   |");
+        System.out.println("|   1.Thanh toán  |  2.Thay đổi SL  |   3.Xóa SP  |  4.Đơn Mua  |   5.Quay lại   |");
         System.out.println("'--------------------------------------------------------------------------------'");
 
         switch (Validate.validateInt()) {
@@ -113,7 +114,7 @@ public class MenuUser {
                 new CheckOut().checkOut();
                 break;
             case 2:
-                increaseDecreaseQuantity();
+                increaseDecrease();
                 break;
             case 3:
                 delete();
@@ -128,7 +129,7 @@ public class MenuUser {
 
     }
 
-    private void increaseDecreaseQuantity() {
+    private void increaseDecrease() {
         System.out.println("Nhập mã sản phẩm bạn muốn thay đổi số lượng:");
         int productId = Validate.validateInt();
         Cart cart = cartReponsitory.findCartByUserLogin();
@@ -195,6 +196,7 @@ public class MenuUser {
             System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s\n" + RESET,
                     "ID", "Tên sản phẩm", "Danh mục", "Mô tả sản phẩm", "Giá sản phẩm");
             // Lặp qua tất cả sản phẩm và kiểm tra xem sản phẩm thuộc danh mục đã chọn
+
             for (Products product : productReponsitory.findAll()) {
                 List<Catalogs> catalogsList = catalogsReponsitory.findAll();
                 Catalogs cat = null;
@@ -204,12 +206,13 @@ public class MenuUser {
                         break;
                     }
                 }
+
                 if (product.getCategoryId().getCatalogName().equals(catalogsReponsitory.findAll().get(choice - 1).getCatalogName())) {
                     if (product.isStatus() && cat.isStatus()) {
 
                         System.out.println(product.toShortString());
                     } else {
-                        System.out.println("Danh mục rỗng đã hết hàng");
+//                        System.out.println("Danh mục rỗng đã hết hàng");
                         return;
                     }
                 }

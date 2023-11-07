@@ -127,7 +127,7 @@ public class CatalogManagement {
     }
 
     private void sortCatalog() {
-        System.out.println("Danh sách sau khi đã sắp xếp:");
+        System.out.println("Danh sách sau khi đã sắp xếp (a-b):");
         List<Catalogs>catalogsList=catalogsReponsitory.findAll();
         List<Catalogs>sortCatalogs=new ArrayList<>(catalogsList);
         sortCatalogs.sort(new Comparator<Catalogs>() {
