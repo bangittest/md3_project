@@ -90,8 +90,5 @@ public class OrderService implements OderReponsitory {
         config.writeFile(Config.URL_ORDER, orderList);
     }
 
-    @Override
-    public void update(Order order) {
 
-    }
 }

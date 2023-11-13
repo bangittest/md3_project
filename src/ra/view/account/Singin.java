@@ -2,18 +2,14 @@ package ra.view.account;
 
 import ra.config.Config;
 import ra.config.Validate;
-import ra.model.Cart;
 import ra.model.account.RoleName;
 import ra.model.account.Users;
-import ra.reponsitory.CartReponsitory;
 import ra.reponsitory.UserReponsitory;
-import ra.service.CartService;
 import ra.service.UserService;
 import ra.view.admin.AdminManagement;
 import ra.view.home.MenuUser;
 
 public class Singin {
-    CartReponsitory cartReponsitory=new CartService();
     UserReponsitory userReponsitory=new UserService();
     Config<Users>usersConfig=new Config<>();
     public void login() {

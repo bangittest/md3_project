@@ -68,10 +68,6 @@ public class CartService implements CartReponsitory {
         config.writeFile(Config.URL_CART,cartList);
     }
 
-    @Override
-    public Cart getCartInfo(int cartId) {
-        return null;
-    }
 
     @Override
     public Cart findCartByUserLogin() {

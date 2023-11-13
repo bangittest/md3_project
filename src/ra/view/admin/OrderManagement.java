@@ -154,7 +154,6 @@ public class OrderManagement {
 
             for (Order order : orderList) {
                 LocalDateTime orderTime = order.getOrderTime();
-
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
                 String formattedOrderTime = orderTime.format(formatter);
                 for (String s : Arrays.asList("Đơn hàng:" + order.getOrderId(), "Tên khách hàng: " + order.getName(), "Điện thoại: " + order.getPhoneNumber(), "Địa chỉ: " + order.getAddress(), "Thời gian đặt hàng: " + formattedOrderTime, "Chi tiết đơn hàng:")) {

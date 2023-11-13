@@ -3,14 +3,12 @@ package ra.view.shoppingcart;
 import ra.config.Config;
 import ra.config.Validate;
 import ra.model.Cart;
-import ra.model.Catalogs;
 import ra.model.Products;
 import ra.model.account.Users;
 import ra.reponsitory.*;
 import ra.service.*;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class AddCart {
 
@@ -24,9 +22,9 @@ public class AddCart {
         System.out.printf("| %s |   %s   |  %s  |     %s       |\n", "Mã SP", "  Tên Sản Phẩm  ", " Số lượng ", "Giá");
         for (Products products : productReponsitory.findAll()) {
             if (products.isStatus()) {
-
-                System.out.printf("|%4d   |  %-20s|     %-6d   |%13.5f  |\n", products.getId(),
-                        products.getProductName(), products.getStock(), products.getUnitPrice());
+                double getUnit= products.getUnitPrice();
+                System.out.printf("|%4d   |  %-20s|     %-6d   |  %-13s|\n", products.getId(),
+                        products.getProductName(), products.getStock(),Validate.formatCurrency(getUnit) );
             }
         }
         System.out.println("'-------------------------------------------------------------'");
@@ -55,9 +53,11 @@ public class AddCart {
                 if (cart == null) {
                     cart = new Cart(cartReponsitory.getNewId(), userLogin.getId(), new HashMap<>(), false);
                 }
+//                Kiểm tra xem key đã cho có tồn tại trong Map hay không.
                 if (cart.getProductCart().containsKey(idBuy)) {
                     cart.getProductCart().put(idBuy, cart.getProductCart().get(idBuy) + 1);
                 } else {
+//                    Thêm một cặp key-value vào Map
                     cart.getProductCart().put(idBuy, 1);
                 }
                 cartReponsitory.save(cart);

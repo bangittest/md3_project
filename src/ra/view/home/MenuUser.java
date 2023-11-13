@@ -1,36 +1,29 @@
 package ra.view.home;
 
-import static java.nio.file.Files.delete;
+
 import static ra.config.Color.*;
 
 import ra.config.Config;
 import ra.config.Validate;
 import ra.model.Cart;
 import ra.model.Catalogs;
-import ra.model.OrdersDetail;
 import ra.model.Products;
 import ra.model.account.Users;
-import ra.model.order.Order;
-import ra.model.order.OrderStatus;
 import ra.reponsitory.*;
 import ra.service.*;
-import ra.view.shoppingcart.AddCart;
-import ra.view.shoppingcart.CheckOut;
-import ra.view.shoppingcart.History;
+import ra.view.shoppingcart.*;
 
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class MenuUser {
-    UserReponsitory userReponsitory = new UserService();
+
     ProductReponsitory productReponsitory = new ProductService();
     CatalogsReponsitory catalogsReponsitory = new CatalogsService();
     Config<Users> config = new Config<>();
     Users users = config.readFile(Config.URL_USERS_LOGIN);
     CartReponsitory cartReponsitory = new CartService();
-    OderReponsitory oderReponsitory = new OrderService();
-
 
     public void menuUser() {
         do {
@@ -84,19 +77,6 @@ public class MenuUser {
     }
 
     private void showCart() {
-//        Cart cart1 = cartReponsitory.findCartByUserLogin();
-//        Map<Integer, Integer> productsInCart = cart1.getProductCart();
-//        double totalAmount = 0;
-//        for (Map.Entry<Integer, Integer> entry : productsInCart.entrySet()) {
-//            int productId = entry.getKey();
-//            int quantity = entry.getValue();
-//            Products product = productReponsitory.findById(productId);
-//            if (product != null) {
-//                double price = product.getUnitPrice();
-//                double subtotal = quantity * price;
-//                totalAmount += subtotal;
-//            }
-//        }
 
         // Hiển thị danh sách các sản phẩm đang có trong giỏ hàng
         System.out.println(".--------------------------------------------------------------------------------.");
@@ -111,6 +91,7 @@ public class MenuUser {
 
             return;
         }
+//        Trả về một Set chứa tất cả các key trong Map.
         for (int idPro : cart.getProductCart().keySet()) {
             Products products = productReponsitory.findById(idPro);
             double unitPrice = products.getUnitPrice();
@@ -127,10 +108,10 @@ public class MenuUser {
                 new CheckOut().checkOut();
                 break;
             case 2:
-                increaseDecrease();
+                new IncreaseDecrease().increaseDecrease();
                 break;
             case 3:
-                delete();
+                new DeleteCart().delete();
                 break;
             case 4:
                 new History().history();
@@ -139,70 +120,7 @@ public class MenuUser {
             default:
                 System.out.println("Lựa chọn không hợp lệ");
         }
-
     }
-
-    private void increaseDecrease() {
-        System.out.println("Nhập mã sản phẩm bạn muốn thay đổi số lượng:");
-        int productId = Validate.validateInt();
-        Cart cart = cartReponsitory.findCartByUserLogin();
-
-        if (cart != null) {
-            Map<Integer, Integer> productsInCart = cart.getProductCart();
-
-            if (productsInCart.containsKey(productId)) {
-                Products product = productReponsitory.findById(productId);
-                if (product != null) {
-                    int currentQuantity = productsInCart.get(productId);
-                    int stock = product.getStock();
-
-                    System.out.println("Số lượng hiện tại của sản phẩm có ID " + productId + " trong giỏ hàng là: " + currentQuantity);
-                    System.out.println("Số lượng hiện tại trong kho là: " + stock);
-
-                    System.out.println("Nhập số lượng mới:");
-                    int newQuantity = Validate.validateInt();
-
-                    if (newQuantity <= 0) {
-                        System.out.println("Số lượng phải lớn hơn 0.");
-                    } else if (newQuantity <= stock) {
-                        productsInCart.put(productId, newQuantity);
-                        cartReponsitory.save(cart);
-                        System.out.println("Đã cập nhật số lượng sản phẩm trong giỏ hàng thành công.");
-                    } else {
-                        System.out.println("Không đủ số lượng sản phẩm trong kho.");
-                    }
-                } else {
-                    System.out.println("Không tìm thấy sản phẩm có ID " + productId);
-                }
-            } else {
-                System.out.println("Không tìm thấy sản phẩm có ID " + productId + " trong giỏ hàng.");
-            }
-        } else {
-            System.out.println("Giỏ hàng trống.");
-        }
-    }
-
-
-    private void delete() {
-        System.out.println("Nhập mã sản phẩm muốn xóa:");
-        int deleteProductId = Validate.validateInt();
-        Cart cart = cartReponsitory.findCartByUserLogin();
-
-        if (cart != null) {
-            Map<Integer, Integer> productsInCart = cart.getProductCart();
-
-            if (productsInCart.containsKey(deleteProductId)) {
-                productsInCart.remove(deleteProductId);
-                cartReponsitory.save(cart);
-                System.out.println("Đã xóa sản phẩm khỏi giỏ hàng thành công.");
-            } else {
-                System.out.println("Không tìm thấy sản phẩm có ID " + deleteProductId + " trong giỏ hàng.");
-            }
-        } else {
-            System.out.println("Giỏ hàng trống.");
-        }
-    }
-
 
     private void searchCatalog() {
         System.out.println("Mời bạn chọn danh mục:");
@@ -281,21 +199,24 @@ public class MenuUser {
         System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s\n" + RESET,
                 "ID", "Tên sản phẩm", "Danh mục", "Mô tả sản phẩm", "Giá sản phẩm");
         for (Products product : products) {
-            List<Catalogs> catalogsList = catalogsReponsitory.findAll();
-            Catalogs cat = null;
-            for (Catalogs catalog : catalogsList) {
-                if (product.getCategoryId().getId() == catalog.getId()) {
-                    cat = catalog;
-                    break;
+            if (product.getUnitPrice()>400000){
+                List<Catalogs> catalogsList = catalogsReponsitory.findAll();
+                Catalogs cat = null;
+                for (Catalogs catalog : catalogsList) {
+                    if (product.getCategoryId().getId() == catalog.getId()) {
+                        cat = catalog;
+                        break;
+                    }
+                }
+                if (product.isStatus() && cat.isStatus()) {
+                    activeProducts.add(product);
                 }
             }
-            if (product.isStatus() && cat.isStatus()) {
-                activeProducts.add(product);
-            }
+
         }
 
         // Sắp xếp danh sách sản phẩm theo giá tiền giảm dần
-        activeProducts.sort(Comparator.comparing(Products::getUnitPrice).reversed());
+        activeProducts.sort(Comparator.comparing(Products::getUnitPrice));
 
         // Hiển thị 10 sản phẩm có giá cao nhất hoặc ít hơn nếu không có đủ 10 sản phẩm
         for (int i = 0; i < Math.min(10, activeProducts.size()); i++) {
@@ -326,7 +247,7 @@ public class MenuUser {
 
     private void showProduct() {
         System.out.println("Tất cả các sản phẩm :");
-        List<Products> activeProducts = new ArrayList<>();
+//        List<Products> activeProducts = new ArrayList<>();
         System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s\n" + RESET,
                 "ID", "Tên sản phẩm", "Danh mục", "Mô tả sản phẩm", "Giá sản phẩm");
         boolean check = true;

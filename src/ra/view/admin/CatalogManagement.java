@@ -13,17 +13,17 @@ import ra.service.ProductService;
 import static ra.config.Color.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CatalogManagement {
     private CatalogsReponsitory catalogsReponsitory = new CatalogsService();
     private ProductReponsitory productReponsitory = new ProductService();
 
     public void menuCategoryManagement() {
-        int pageSize = 5;
-        int currentPage = 1;
+
 
         Config<Users> config = new Config<>();
         Users users = config.readFile(Config.URL_USERS_LOGIN);
@@ -53,7 +53,7 @@ public class CatalogManagement {
                     editCatalog();
                     break;
                 case 4:
-                    deleteCatalog();
+//                    deleteCatalog();
                     break;
                 case 5:
                     sortCatalog();
@@ -83,28 +83,28 @@ public class CatalogManagement {
             System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s%n" + RESET,
                     "ID", "Tên danh mục", "Mô tả", "Trạng thái");
             System.out.println(catalogsEdit);
-         while (true){
-             System.out.println("""
-                    Bạn có muốn thay đổi trạng thái không?
-                    1.Có
-                    2.Không
-                    Mời bạn lựa chọn
-                    """);
-             switch (Validate.validateInt()){
-                 case 1:
-                     catalogsEdit.setStatus(!catalogsEdit.isStatus());
-                     catalogsReponsitory.save(catalogsEdit);
-                     System.out.println("Sửa trạng thái danh mục sản phẩm thành công");
-                     System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s%n" + RESET,
-                             "ID", "Tên danh mục", "Mô tả", "Trạng thái");
-                     System.out.println(catalogsEdit);
-                     return;
-                 case 2:
-                     return;
-                 default:
-                     System.out.println("Lựa chọn không hợp lệ");
-             }
-         }
+            while (true) {
+                System.out.println("""
+                        Bạn có muốn thay đổi trạng thái không?
+                        1.Có
+                        2.Không
+                        Mời bạn lựa chọn
+                        """);
+                switch (Validate.validateInt()) {
+                    case 1:
+                        catalogsEdit.setStatus(!catalogsEdit.isStatus());
+                        catalogsReponsitory.save(catalogsEdit);
+                        System.out.println("Sửa trạng thái danh mục sản phẩm thành công");
+                        System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s%n" + RESET,
+                                "ID", "Tên danh mục", "Mô tả", "Trạng thái");
+                        System.out.println(catalogsEdit);
+                        return;
+                    case 2:
+                        return;
+                    default:
+                        System.out.println("Lựa chọn không hợp lệ");
+                }
+            }
         }
     }
 
@@ -114,22 +114,23 @@ public class CatalogManagement {
         String searchKey = Validate.validateString();
         System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s%n" + RESET,
                 "ID", "Tên danh mục", "Mô tả", "Trạng thái");
-        boolean check=true;
-        for (Catalogs catalogs: catalogsReponsitory.findAll()) {
-            if (catalogs.getCatalogName().toLowerCase().contains(searchKey)){
+        boolean check = true;
+        for (Catalogs catalogs : catalogsReponsitory.findAll()) {
+            if (catalogs.getCatalogName().toLowerCase().contains(searchKey)) {
                 System.out.println(catalogs);
-                check=false;
+                check = false;
             }
         }
-        if (check){
+        if (check) {
             System.out.println(RED + "Không tìm thấy danh mục nào phù hợp với tìm kiếm của bạn." + RESET);
         }
     }
 
+
     private void sortCatalog() {
         System.out.println("Danh sách sau khi đã sắp xếp (a-b):");
-        List<Catalogs>catalogsList=catalogsReponsitory.findAll();
-        List<Catalogs>sortCatalogs=new ArrayList<>(catalogsList);
+        List<Catalogs> catalogsList = catalogsReponsitory.findAll();
+        List<Catalogs> sortCatalogs = new ArrayList<>(catalogsList);
         sortCatalogs.sort(new Comparator<Catalogs>() {
             @Override
             public int compare(Catalogs o1, Catalogs o2) {
@@ -138,58 +139,60 @@ public class CatalogManagement {
         });
         System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s%n" + RESET,
                 "ID", "Tên danh mục", "Mô tả", "Trạng thái");
-        for (Catalogs catalogs: sortCatalogs) {
+        for (Catalogs catalogs : sortCatalogs) {
             System.out.println(catalogs);
         }
         //Luu danh sach da sap xep vao 1 tap tin moi
-        Config<List<Catalogs>>config1=new Config<>();
-        config1.writeFile(Config.URL_CATALOGS_SORT,sortCatalogs);
+        Config<List<Catalogs>> config1 = new Config<>();
+        config1.writeFile(Config.URL_CATALOGS_SORT, sortCatalogs);
     }
 
-    private void deleteCatalog() {
-        System.out.println("Nhập ID danh mục cần xóa:");
-        int idDelete = Validate.validateInt();
+//    private void deleteCatalog() {
+//        System.out.println("Nhập ID danh mục cần xóa:");
+//        int idDelete = Validate.validateInt();
+//
+//        Catalogs catalogsDelete = catalogsReponsitory.findById(idDelete);
+//        System.out.println(catalogsDelete);
+//        if (catalogsDelete == null) {
+//            System.out.println("Danh mục theo ID vừa nhập không tồn tại");
+//            return;
+//        }
+//
+//        List<Products> productsList = productReponsitory.findAll();
+////cach 1
+//        for (Products product : productsList) {
+//            if (product.getCategoryId().equals(idDelete) ) {
+//                productsList.remove(product);
+//            productReponsitory.save(product);
+//            }
+//        }
+//        cach 2
+//        List<Products>productsList1=productReponsitory.findAll().stream().filter(p -> p.getCategoryId().equals(idDelete)).collect(Collectors.toList());
+//        for (Products products : productsList1) {
+//            productsList1.remove(products);
+//            productReponsitory.save(products);
+//        }
 
-        Catalogs catalogsDelete = catalogsReponsitory.findById(idDelete);
-        System.out.println(catalogsDelete);
-        if (catalogsDelete == null) {
-            System.out.println("Danh mục theo ID vừa nhập không tồn tại");
-            return;
-        }
+//        while (true) {
+//            System.out.println("""
+//                    Bạn có chắc chắn muốn xóa không?
+//                    1.Có
+//                    2.Không
+//                    Mời bạn lựa chọn
+//                    """);
+//            switch (Validate.validateInt()) {
+//                case 1:
+//                    catalogsReponsitory.delete(idDelete);
+//                    System.out.println("Xóa danh mục thành công");
+//                case 2:
+//                    return;
+//                default:
+//                    System.out.println("Lựa chọn không hợp lệ");
+//                    break;
+//            }
+//        }
 
-        List<Products> productsList = productReponsitory.findAll();
-
-        boolean checkProduct = false;
-        for (Products product : productsList) {
-            if (product.getCategoryId().getId() == idDelete) {
-                checkProduct = true;
-                break;
-            }
-        }
-
-        if (checkProduct) {
-            System.out.println(RED + "Danh mục đã tồn tại sản phẩm. Không thể xóa." + RESET);
-        } else {
-            while (true) {
-                System.out.println("""
-                        Bạn có chắc chắn muốn xóa không?
-                        1.Có
-                        2.Không
-                        Mời bạn lựa chọn
-                        """);
-                switch (Validate.validateInt()) {
-                    case 1:
-                        catalogsReponsitory.delete(idDelete);
-                        System.out.println("Xóa danh mục thành công");
-                    case 2:
-                        return;
-                    default:
-                        System.out.println("Lựa chọn không hợp lệ");
-                        break;
-                }
-            }
-        }
-    }
+//    }
 
     private void editCatalog() {
         System.out.println("Mời nhập ID danh mục cần sửa :");

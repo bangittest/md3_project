@@ -5,7 +5,6 @@ import ra.view.home.Home;
 
 public class Main {
     public static void main(String[] args) {
-
         Users userLogin=new Config<Users>().readFile(Config.URL_USERS_LOGIN);
         if (userLogin!=null){
             new Singin().checkRoleLogin(userLogin);
@@ -13,5 +12,4 @@ public class Main {
             new Home().menuHome();
         }
     }
-
 }

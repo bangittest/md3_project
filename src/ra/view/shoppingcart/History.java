@@ -19,7 +19,6 @@ import static ra.config.Color.RESET;
 
 public class History {
     ProductReponsitory productReponsitory = new ProductService();
-
     Config<Users> config = new Config<>();
     Users users = config.readFile(Config.URL_USERS_LOGIN);
     OderReponsitory oderReponsitory = new OrderService();
@@ -35,7 +34,6 @@ public class History {
                 bill(order);
             }
         }
-
 
         if (!hasOrders) {
             System.out.println(RED+ "Không có đơn hàng nào" + RESET);

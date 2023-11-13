@@ -41,6 +41,9 @@ public class MenuProfile {
 
     private void changePass() {
         Users usersChangepass = userReponsitory.findById(users.getId());
+        System.out.println("Thông tin cá nhân là :");
+        System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+                "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
         System.out.println(usersChangepass);
 
         while (true) {
@@ -78,7 +81,10 @@ public class MenuProfile {
 
     private void profile() {
         Users userProfile = userReponsitory.findById(users.getId());
-        System.out.println("Thông tin cá nhân là :" + userProfile);
+        System.out.println("Thông tin cá nhân là :");
+        System.out.printf("\u001B[36m%-10s %-20s %-20s %-20s %-20s %-20s %-20s%n" + RESET,
+                "ID","Tài khoản","Email","Họ và tên","Trạng thái","Phân quyền","Số điện thoại");
+        System.out.println(userProfile);
         System.out.println("\u001B[35m╔══════════════════════════ Sửa thông tin cá nhân ═══════════════════════════╗");
         System.out.println("\u001B[35m║                       \u001B[36m1. Sửa thông tin email                               \u001B[35m║");
         System.out.println("\u001B[35m║                       \u001B[36m2. Sửa họ và tên                                     \u001B[35m║");
